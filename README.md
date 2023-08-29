@@ -5,7 +5,7 @@
 <h1>Endpoint Storage API Documentation</h1>
 
 <b>DEMO URL:</b><br/>
-https://larapi-denyocrworld.vercel.app
+https://larapi-denyocrworld.vercel.app<br><br>
 
 <p>API ini memungkinkan Anda mengelola data pada berbagai endpoint dengan fitur penyimpanan yang dapat diatur menggunakan konsep <em>storage</em> yang dapat disesuaikan.</p>
 

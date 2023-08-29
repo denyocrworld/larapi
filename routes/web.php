@@ -98,11 +98,22 @@ Route::delete('{storage}/{endpoint}/{id}', function ($storage, $endpoint, $id) {
     $storageKey = "{$storage}_{$endpoint}";
     $data = Cache::get($storageKey, []);
 
-    if (isset($data[$id])) {
-        $deletedItem = $data[$id];
-        unset($data[$id]);
+    $success = false;
+    foreach ($data as $key => $item) {
+        if ($item['id'] == $id) {
+            unset($data[$key]);
+            $success = true;
+            break;
+        }
+    }
+
+    if ($success) {
         Cache::put($storageKey, $data);
-        return response()->json($deletedItem);
+        return response()->json([
+            "data" => [
+                "message" => "Data deleted"
+            ]
+        ]);
     } else {
         return response()->json(['error' => 'Item not found'], 404);
     }
