@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/{endpoint}', function ($endpoint) {
+Route::get('{endpoint}', function ($endpoint) {
     $page = request()->query('page', 1); // Halaman saat ini
     $perPage = request()->query('per_page', 10); // Jumlah item per halaman
 
@@ -44,7 +44,7 @@ Route::get('/{endpoint}', function ($endpoint) {
         ],
     ]);
 });
-Route::post('/{endpoint}', function ($endpoint) {
+Route::post('{endpoint}', function ($endpoint) {
     $requestData = request()->all();
 
     // Mendapatkan data terakhir yang ada di cache untuk endpoint
@@ -74,7 +74,7 @@ Route::post('/{endpoint}', function ($endpoint) {
     return response()->json($requestData, 201);
 });
 
-Route::put('/{endpoint}/{id}', function ($endpoint, $id) {
+Route::put('{endpoint}/{id}', function ($endpoint, $id) {
     $requestData = request()->all();
     $data = Cache::get($endpoint, []);
 
@@ -98,7 +98,7 @@ Route::put('/{endpoint}/{id}', function ($endpoint, $id) {
 });
 
 // DELETE /{endpoint}/{id}
-Route::delete('/{endpoint}/{id}', function ($endpoint, $id) {
+Route::delete('{endpoint}/{id}', function ($endpoint, $id) {
     $data = Cache::get($endpoint, []);
 
     if (isset($data[$id])) {
@@ -111,7 +111,7 @@ Route::delete('/{endpoint}/{id}', function ($endpoint, $id) {
     }
 });
 
-Route::delete('/{endpoint}/action/delete-all', function ($endpoint) {
+Route::delete('{endpoint}/action/delete-all', function ($endpoint) {
     Cache::forget($endpoint);
     Cache::forget("{$endpoint}_nextId");
 
