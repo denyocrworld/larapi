@@ -2,23 +2,13 @@
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
- */
+use Illuminate\Support\Facades\Cache;
 
 Route::get('/', function () {
     return "hello world!!";
 });
 
-Route::get('{storage}/{endpoint}', function ($storage, $endpoint) {
+Route::get('{storage}/api/{endpoint}', function ($storage, $endpoint) {
     $page = request()->query('page', 1);
     $perPage = request()->query('per_page', 10);
 
@@ -45,12 +35,11 @@ Route::get('{storage}/{endpoint}', function ($storage, $endpoint) {
     ]);
 });
 
-Route::post('{storage}/{endpoint}', function ($storage, $endpoint) {
+Route::post('{storage}/api/{endpoint}', function ($storage, $endpoint) {
     $requestData = request()->all();
     $storageKey = "{$storage}_{$endpoint}";
 
     $data = Cache::get($storageKey, []);
-
     $nextId = Cache::get("{$storage}_{$endpoint}_nextId", 1);
 
     $now = Carbon::now();
@@ -69,7 +58,7 @@ Route::post('{storage}/{endpoint}', function ($storage, $endpoint) {
 
     return response()->json($requestData, 201);
 });
-Route::put('{storage}/{endpoint}/{id}', function ($storage, $endpoint, $id) {
+Route::put('{storage}/api/{endpoint}/{id}', function ($storage, $endpoint, $id) {
     $requestData = request()->all();
     $storageKey = "{$storage}_{$endpoint}";
 
@@ -94,7 +83,7 @@ Route::put('{storage}/{endpoint}/{id}', function ($storage, $endpoint, $id) {
 });
 
 // DELETE /{storage}/{endpoint}/{id}
-Route::delete('{storage}/{endpoint}/{id}', function ($storage, $endpoint, $id) {
+Route::delete('{storage}/api/{endpoint}/{id}', function ($storage, $endpoint, $id) {
     $storageKey = "{$storage}_{$endpoint}";
     $data = Cache::get($storageKey, []);
 
@@ -119,7 +108,7 @@ Route::delete('{storage}/{endpoint}/{id}', function ($storage, $endpoint, $id) {
     }
 });
 
-Route::delete('{storage}/{endpoint}/action/delete-all', function ($storage, $endpoint) {
+Route::delete('{storage}/api/{endpoint}/action/delete-all', function ($storage, $endpoint) {
     $storageKey = "{$storage}_{$endpoint}";
     Cache::forget($storageKey);
     Cache::forget("{$storage}_{$endpoint}_nextId");
